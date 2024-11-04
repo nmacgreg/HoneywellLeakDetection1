@@ -9,6 +9,7 @@ int leak2 = 0;
 int leak3 = 0; 
 int counter = 0;
 int DEBUG = 1;
+int timeout = 100;
 
 void setup() {
   // put your setup code here, to run once: 
@@ -20,15 +21,36 @@ void setup() {
   }
 }
 
+// When the cable is dry, over the course of 3 seconds, the reading will cycle between 0 and 1023
+// When the cable is wet, the reading will be 
+int dataSample (){
+  int sampleCounter = 0;
+  int currentSample = 0;
+  // collect 20 samples
+  if (DEBUG) {
+    Serial.print("Datapoints: ");
+  }
+  for (sampleCounter = 0; sampleCounter<20; sampleCounter++) {
+    currentSample = analogRead(leakPin);
+    if (DEBUG) {
+      Serial.print(currentSample);
+      Serial.print(", ");
+    }
+    delay(timeout);   
+    if (currentSample < 110 || currentSample > 900) {
+      return false;  // no leak
+    }
+  }
+  return true;   // leak
+}
+
 void loop() {
   //Check for water leaks - we'll take 3 readings serially... seems to be some capacitance
-
+  /* 
   leak1 = analogRead(leakPin);
-  for (counter=0; counter<1024; counter++) {
-    
-    delay(10);
-  };
+  delay(timeout);
   leak2 = analogRead(leakPin);
+  delay(timeout);
   leak3 = analogRead(leakPin);
   if (DEBUG) {
     Serial.print("The value of leak entries is: ");
@@ -51,5 +73,15 @@ void loop() {
     }
   }
   // sleep(10);
+  */
+  if (dataSample()) {
+    ledState = HIGH;  // a leak has been detected
+  } else {
+    ledState = LOW;  // no leak 
+  }
   digitalWrite(ledPin, ledState);
+  if (DEBUG) {
+    Serial.println("");
+  }
+  delay (6000);
 }
