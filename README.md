@@ -12,6 +12,7 @@ In summary, this is an Arduino sketch which monitors one analog pin, searching f
     * Why did it die?  I speculate:
         * It was pretty expensive, at $25 US for just 8 ft. ... I spent over $500 lining my basement walls & doing most sinks and appliances
         * It was designed around an alarm-sounding base unit that was battery-powered.  (That type of solution didn't appeal to me... maybe also not to other people.)
+        * A problem I found: the cable come coiled, and retains that shape a lot, making it hard to secure to the ground so it can touch the water.  The retained shape makes it lift up. It came with plastic adhesive clips to secure it to the ground, but these are not a great solution.
 * The piezo speaker is a no-name that came in the kit from Freenove.com
 
 ## Software
@@ -19,6 +20,20 @@ In summary, this is an Arduino sketch which monitors one analog pin, searching f
 * The initial version supports monitoring only a single channel. 
 * When the channel signals a leak, it turns on the onboard LED, and the peizo speaker.
 * When the water detection cable is dry, it turns off the onboard LED, and the speaker.
+
+### Surprising Physical Characteristics
+
+* The Honeywell leak-detection cable didn't come with a hacker-friendly guide. This is a DIY project. 
+* Honeywell sold this with a battery-powered base-station... I never bought that to tear down, to see how it worked.
+* I was surprised that when the cable is dry, the analog pin measuring the voltage across the 2 black wires in the cable seems to follow a sinusoidal pattern, ranging from 0 to 1023 (on this Arduino), and back to 0, with a period of 3 to 4 seconds.
+* Conversely, when the cable is wet, the analog voltage measurement shows much less variability
+    * (in testing) If a part of the cable is submerged, it measures pretty consistently 670-680
+    * (simulating real-world) if you place the cable on the ground, and drip 10 drops onto the cable where it touches the ground, it varies initially 580-710, settles 660-690
+* The cable / this system is very responsive!  
+    * If you drop the cable into a pot of water, the system is aware & alerting within 5 seconds! Ditto, a few drops of water on the ground
+    * If you dry the wet area of the cable with a kitchen towel, the alarm is cancelled within 5 seconds!
+    * The cable feels slightly waxy, as if it's water repellent, but it's not.  It's not a coating, it doesn't come off on your hands.
+    
 
 ## Future Plans
 
