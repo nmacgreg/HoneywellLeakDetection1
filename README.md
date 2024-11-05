@@ -5,7 +5,13 @@ In summary, this is an Arduino sketch which monitors one analog pin, searching f
 ## Hardware
 
 * This began life on an Arduino Uno from Freenove.com
-* I'm using Honeywell leak detection cable model... ? 
+* I'm using [Honeywell leak detection cable, RWD80](https://www.honeywellstore.com/store/products/honeywell-water-defense-leak-sensing-alarm-extension-cable.htm), originally purchased for a renovation in 2019.  
+    * In 2024, I found this product is now discontinued.
+    * [The Wayback Machine's first hit in Oct, 2011](http://web.archive.org/web/20111014084931/https://www.honeywellstore.com/store/products/honeywell-water-defense-leak-sensing-alarm-extension-cable.htm)
+    * The Wayback Machine has hits in 2019, listing it "In-stock", but by Apr 2022, it's marked "DISCONTINUED". 
+    * Why did it die?  I speculate:
+        * It was pretty expensive, at $25 US for just 8 ft. ... I spent over $500 lining my basement walls & doing most sinks and appliances
+        * It was designed around an alarm-sounding base unit that was battery-powered.  (That type of solution didn't appeal to me... maybe also not to other people.)
 * The piezo speaker is a no-name that came in the kit from Freenove.com
 
 ## Software
