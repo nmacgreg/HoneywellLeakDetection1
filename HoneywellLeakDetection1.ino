@@ -3,6 +3,7 @@
 // Pin Assignments
 const int ledPin = LED_BUILTIN;
 // const int leakPins[sensorCount] = {A0, A1, A2, A3, A4, A5, A6, A7, A8, A9};
+const int sensorCount = 2;
 const int leakPins[sensorCount] = {A0, A1};
 const int buzzer = 9;
 // Some constants that might need adjusting, as I test the functionality
@@ -17,9 +18,10 @@ void setup() {
   // put your setup code here, to run once: 
   pinMode(ledPin, OUTPUT);
   pinMode(buzzer, OUTPUT);
-  analogRead(leakPin);
   if (DEBUG) {
     Serial.begin(19200);
+    Serial.println("");
+    Serial.println("=====================================");
     Serial.println("Initialized HoneywellleakDetection1...");
   }
 }
@@ -32,8 +34,9 @@ bool isLeakDetected (int leakPin){
 
   // collect samples
   if (DEBUG) {
+    Serial.println("");
     Serial.print("Datapoints for sensor on pin "); 
-    Serial.print(leakpin);
+    Serial.print(leakPin);
     Serial.print(": ");
   }
 
@@ -51,17 +54,20 @@ bool isLeakDetected (int leakPin){
   return true;   // leak
 }
 
-void triggerAlarm() }
+void triggerAlarm() {
   digitalWrite(ledPin, HIGH);
   tone(buzzer, 1000);
 }
 
-void cancelAlarm() }
+void cancelAlarm() {
   digitalWrite(ledPin, LOW);
   noTone(buzzer);
 }
 
 void loop() {
+  bool leakDetected;
+  leakDetected = false;
+
   //Check for water leaks
   for (int i = 0; i < sensorCount; i++) {
     if (isLeakDetected(leakPins[i])) {
@@ -70,6 +76,13 @@ void loop() {
       if (DEBUG) Serial.println(i);
     }
   }
-  if (DEBUG) Serial.println("");
+
+  if (leakDetected) {
+    triggerAlarm();
+  } else {
+    cancelAlarm();
+  }
+  if (DEBUG) Serial.println(); // visually mark the end of one round of testing all the sensors
+
   delay (6000);
 }
