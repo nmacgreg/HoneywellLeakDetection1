@@ -1,7 +1,9 @@
 // Inspired by: https://forum.arduino.cc/t/interfacing-with-rope-leak-detector-cable/247230/13
 
 const int ledPin = LED_BUILTIN;
-int leakPin = A0;
+const int leakPin = A0;
+const int buzzer = 9;
+
 int ledState = LOW;
 int DEBUG = 1;
 int timeout = 100;
@@ -9,6 +11,7 @@ int timeout = 100;
 void setup() {
   // put your setup code here, to run once: 
   pinMode(ledPin, OUTPUT);
+  pinMode(buzzer, OUTPUT);
   analogRead(leakPin);
   if (DEBUG) {
     Serial.begin(19200);
@@ -43,8 +46,10 @@ void loop() {
   //Check for water leaks
   if (dataSample()) {
     ledState = HIGH;  // a leak has been detected
+    tone(buzzer, 1000);
   } else {
     ledState = LOW;  // no leak 
+    noTone(buzzer);
   }
   digitalWrite(ledPin, ledState);
   if (DEBUG) {
