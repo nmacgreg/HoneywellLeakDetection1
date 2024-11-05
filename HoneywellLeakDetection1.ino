@@ -21,8 +21,8 @@ void setup() {
   }
 }
 
-// When the cable is dry, over the course of 3 seconds, the reading will cycle between 0 and 1023
-// When the cable is wet, the reading will be 
+// When the cable is dry, over the course of about 3 seconds, the reading will cycle between 0 and 1023... sinusoidal?  (Capacitance?)
+// When the cable is wet, the reading will be in the range of approximately 500-800
 int dataSample (){
   int sampleCounter = 0;
   int currentSample = 0;
@@ -37,7 +37,7 @@ int dataSample (){
       Serial.print(", ");
     }
     delay(timeout);   
-    if (currentSample < 110 || currentSample > 900) {
+    if (currentSample < 300 || currentSample > 900) {
       return false;  // no leak
     }
   }
@@ -45,35 +45,7 @@ int dataSample (){
 }
 
 void loop() {
-  //Check for water leaks - we'll take 3 readings serially... seems to be some capacitance
-  /* 
-  leak1 = analogRead(leakPin);
-  delay(timeout);
-  leak2 = analogRead(leakPin);
-  delay(timeout);
-  leak3 = analogRead(leakPin);
-  if (DEBUG) {
-    Serial.print("The value of leak entries is: ");
-    Serial.print(leak1);
-    Serial.print(", ");
-    Serial.print(leak2);
-    Serial.print(", ");
-    Serial.print(leak3);
-    Serial.print(", ");
-  }
-  if (leak1 > 100 && leak2 > 100 && leak3 > 100) {
-    ledState = HIGH;
-    if (DEBUG) {
-      Serial.println("Leak detected!");
-    }
-  } else {
-    ledState = LOW;
-    if (DEBUG) {
-      Serial.println("Normal - no leak detected.");
-    }
-  }
-  // sleep(10);
-  */
+  //Check for water leaks
   if (dataSample()) {
     ledState = HIGH;  // a leak has been detected
   } else {
