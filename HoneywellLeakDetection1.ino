@@ -3,11 +3,6 @@
 const int ledPin = LED_BUILTIN;
 int leakPin = A0;
 int ledState = LOW;
-unsigned long previousMillis = 0;
-int leak1 = 0;
-int leak2 = 0;
-int leak3 = 0; 
-int counter = 0;
 int DEBUG = 1;
 int timeout = 100;
 
