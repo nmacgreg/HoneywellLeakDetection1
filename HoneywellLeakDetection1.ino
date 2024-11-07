@@ -3,16 +3,15 @@
 // Pin Assignments
 const int ledPin = LED_BUILTIN;
 // const int leakPins[sensorCount] = {A0, A1, A2, A3, A4, A5, A6, A7, A8, A9};
-const int sensorCount = 2;
-const int leakPins[sensorCount] = {A0, A1};
+const int leakPins[] = {A0, A1, A2, A3};
+const int wetThreshold[] = {20, 30, 60, 140}; // Purely by observation; All haven't been tested yet, so I'm taking the highest observed dry level, and adding 10%
+const int sensorCount = sizeof(leakPins) / sizeof(leakPins[0]);
 const int buzzer = 9;
 // Some constants that might need adjusting, as I test the functionality
-const int DRY_THRESHOLD_LOW = 300;
-const int DRY_THRESHOLD_HIGH = 900;
 const int SAMPLE_COUNT = 20;
-
-const bool DEBUG = 1;
 const int timeout = 100; // dwell time between sampling
+// Set this to true, if you want serial output!
+const bool DEBUG = false;
 
 void setup() {
   // put your setup code here, to run once: 
@@ -28,7 +27,7 @@ void setup() {
 
 // When the cable is dry, over the course of about 3 seconds, the reading will cycle between 0 and 1023... sinusoidal?  (Capacitance?)
 // When the cable is wet, the reading will be in the range of approximately 500-800
-bool isLeakDetected (int leakPin){
+bool isLeakDetected (int leakPin, int threshold){
   int sampleCounter = 0;
   int currentSample;
 
@@ -46,11 +45,12 @@ bool isLeakDetected (int leakPin){
       Serial.print(currentSample);
       Serial.print(", ");
     }
-    if (currentSample < DRY_THRESHOLD_LOW || currentSample > DRY_THRESHOLD_HIGH) {
+    if (currentSample < threshold) {
       return false;  // no leak
     }
     delay(timeout);   
   }
+  triggerAlarm();
   return true;   // leak
 }
 
@@ -70,18 +70,14 @@ void loop() {
 
   //Check for water leaks
   for (int i = 0; i < sensorCount; i++) {
-    if (isLeakDetected(leakPins[i])) {
+    if (isLeakDetected(leakPins[i], wetThreshold[i])) {
       leakDetected = true;
       if (DEBUG) Serial.print("Leak detected on sensor ");
-      if (DEBUG) Serial.println(i);
+      if (DEBUG) Serial.print(i);
     }
   }
 
-  if (leakDetected) {
-    triggerAlarm();
-  } else {
-    cancelAlarm();
-  }
+  if (! leakDetected) cancelAlarm();
   if (DEBUG) Serial.println(); // visually mark the end of one round of testing all the sensors
 
   delay (6000);
