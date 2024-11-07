@@ -4,14 +4,14 @@
 const int ledPin = LED_BUILTIN;
 // const int leakPins[sensorCount] = {A0, A1, A2, A3, A4, A5, A6, A7, A8, A9};
 const int leakPins[] = {A0, A1, A2, A3};
-const int wetThreshold[] = {20, 30, 60, 140}; // Purely by observation; All haven't been tested yet, so I'm taking the highest observed dry level, and adding 10%
+const int wetThreshold[] = {20, 30, 86, 140}; // Purely by observation; All haven't been tested yet, so I'm taking the highest observed dry level, and adding 10%
 const int sensorCount = sizeof(leakPins) / sizeof(leakPins[0]);
 const int buzzer = 9;
 // Some constants that might need adjusting, as I test the functionality
 const int SAMPLE_COUNT = 20;
 const int timeout = 100; // dwell time between sampling
 // Set this to true, if you want serial output!
-const bool DEBUG = false;
+const bool DEBUG = true;
 
 void setup() {
   // put your setup code here, to run once: 
@@ -36,6 +36,8 @@ bool isLeakDetected (int leakPin, int threshold){
     Serial.println("");
     Serial.print("Datapoints for sensor on pin "); 
     Serial.print(leakPin);
+    Serial.print(" with threshold ");
+    Serial.print(threshold);
     Serial.print(": ");
   }
 
