@@ -3,8 +3,14 @@
 // Pin Assignments
 const int ledPin = LED_BUILTIN;
 // const int leakPins[sensorCount] = {A0, A1, A2, A3, A4, A5, A6, A7, A8, A9};
-const int leakPins[] = {A0, A1, A2, A3};
-const int wetThreshold[] = {20, 30, 86, 140}; // Purely by observation; All haven't been tested yet, so I'm taking the highest observed dry level, and adding 10%
+// A0 = Test
+// A1 = Maxwell's shower
+// A2 = North foundation
+// A3 = East foundation
+// A4 = Kitchen Refrigerator
+// A5 = Kitchen Sink
+const int leakPins[] = {A0, A1, A2, A3, A4, A5};
+const int wetThreshold[] = {20, 30, 86, 140, 30, 30}; // Purely by observation; All haven't been tested yet, so I'm taking the highest observed dry level, and adding 10%
 const int sensorCount = sizeof(leakPins) / sizeof(leakPins[0]);
 const int buzzer = 9;
 // Some constants that might need adjusting, as I test the functionality
