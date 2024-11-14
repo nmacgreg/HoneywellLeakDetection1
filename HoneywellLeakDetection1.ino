@@ -73,16 +73,21 @@ bool isLeakDetected (int leakPin, int threshold){
 
 bool isSumpFull (int threshold){
   // from https://projecthub.arduino.cc/Isaac100/getting-started-with-the-hc-sr04-ultrasonic-sensor-7cabe1
+  int duration = 0;
+  int distance = 0;
+  // Kick off the measuring process by tickling the "trigger" pin with particular timing delays; strobe the trigger!
   digitalWrite(trigPin, LOW);  
   delayMicroseconds(2);  
   digitalWrite(trigPin, HIGH);  
   delayMicroseconds(10);  
   digitalWrite(trigPin, LOW);  
   //
-  int duration = 0;
-  int distance = 0;
   duration=pulseIn(echoPin, HIGH);
   distance=(duration*.0343)/2;
+  if (DEBUG) {
+    Serial.print("Distance to the top of the water: ");
+    Serial.println(distance);
+  }
   if (distance > threshold) {
      return true;
   } else {
@@ -115,7 +120,7 @@ void loop() {
   // Also check the depth of water in the sump
   if (isSumpFull(sumpThreshold)) {
       leakDetected = true;
-      if (DEBUG) Serial.print("Leak detected on sensor ");
+      if (DEBUG) Serial.print("The sump is full above the threshold");
   }
 
   if (! leakDetected) cancelAlarm();
